@@ -9,9 +9,9 @@ Created on Mon May 19 07:36:20 2025
 import telebot
 import sqlite3
 from datetime import datetime
-
-TOKEN = 'توکن_ربات_خودت_را_اینجا_قرار_بده'
+TOKEN = os.getenv("TELEGRAM_TOKEN")
 bot = telebot.TeleBot(TOKEN)
+
 
 # حالت مرحله‌ای کاربران
 user_states = {}
