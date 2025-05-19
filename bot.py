@@ -1,3 +1,4 @@
+# ✅ فایل: bot.py
 import os
 import telebot
 import sqlite3
@@ -5,8 +6,6 @@ from datetime import datetime
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 bot = telebot.TeleBot(TOKEN)
-
-
 
 # حالت مرحله‌ای کاربران
 user_states = {}
@@ -48,7 +47,7 @@ def start(msg):
 def handle(msg):
     uid = msg.chat.id
     if uid not in user_states:
-        bot.send_message(uid, "لطفاً /start را وارد کنید.")
+        bot.send_message(uid, "لطفاً ابتدا /start را وارد کنید.")
         return
 
     state = user_states[uid]
@@ -73,6 +72,31 @@ def handle(msg):
         save_user(uid, state['name'], state['age'], state['phone'], state['interest'])
         bot.send_message(uid, "✅ اطلاعات شما با موفقیت ثبت شد.")
         del user_states[uid]
+
+# نمایش لیست کاربران
+@bot.message_handler(commands=['show'])
+def show_data(msg):
+    conn = sqlite3.connect("users.db")
+    c = conn.cursor()
+    c.execute("SELECT name, age, phone FROM users")
+    rows = c.fetchall()
+    conn.close()
+
+    if not rows:
+        bot.send_message(msg.chat.id, "هیچ داده‌ای ثبت نشده.")
+        return
+
+    text = "📋 لیست کاربران:\n\n"
+    for r in rows:
+        text += f"👤 {r[0]}, سن: {r[1]}, تلفن: {r[2]}\n"
+    
+    bot.send_message(msg.chat.id, text)
+
+# اجرای اولیه
+init_db()
+print("🤖 ربات در حال اجراست...")
+bot.infinity_polling()
+
 
 # اجرای اولیه
 init_db()
