@@ -1,16 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon May 19 07:36:20 2025
-
-@author: MASROUR
-"""
-
-# ✅ فایل: bot.py
+import os
 import telebot
 import sqlite3
 from datetime import datetime
+
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 bot = telebot.TeleBot(TOKEN)
+
 
 
 # حالت مرحله‌ای کاربران
